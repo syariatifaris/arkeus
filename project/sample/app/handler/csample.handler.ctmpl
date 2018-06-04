@@ -1,0 +1,33 @@
+package handler
+
+import (
+	"net/http"
+
+	"github.com/gorilla/mux"
+	"github.com/syariatifaris/arkeus/core/framework/handler"
+	"[cproject_path]/app/module/[csample]/repo"
+)
+
+func New[CSample]Handler(repo repo.[CSample]Repository) *[CSample]Handler {
+	return &[CSample]Handler{
+		repo: repo,
+	}
+}
+
+type [CSample]Handler struct {
+	repo repo.[CSample]Repository
+	handler.BaseHandler
+}
+
+func (*[CSample]Handler) Name() string {
+	return "[CSample]Handler"
+}
+
+func (s *[CSample]Handler) RegisterHandlers(router *mux.Router) {
+	[csample]Router := router.PathPrefix("/[csample]").Subrouter()
+	[csample]Router.HandleFunc("/all", s.NoAuthenticate(s.Index)).Methods(http.MethodGet)
+}
+
+func (s *[CSample]Handler) Index(r *http.Request) (interface{}, error) {
+	return s.repo.GetAll(), nil
+}

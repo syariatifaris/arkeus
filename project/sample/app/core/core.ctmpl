@@ -1,0 +1,32 @@
+package core
+
+import (
+	"github.com/gorilla/mux"
+	"github.com/karlkfi/inject"
+	fwhandler "github.com/syariatifaris/arkeus/core/framework/handler"
+	"[cproject_path]/app/handler"
+	"[cproject_path]/app/module/[csample]/repo"
+)
+
+//gets new dependencies
+func NewDependencies() inject.Graph {
+	var (
+		router *mux.Router
+
+		[csample]Repo repo.[CSample]Repository
+
+		baseHandler  *fwhandler.BaseHandler
+		[csample]Handler *handler.[CSample]Handler
+	)
+
+	graph := inject.NewGraph()
+
+	graph.Define(&router, inject.NewProvider(mux.NewRouter))
+
+	graph.Define(&[csample]Repo, inject.NewProvider(repo.New[CSample]Repository))
+
+	graph.Define(&baseHandler, inject.NewProvider(fwhandler.NewSimpleBaseHandler))
+	graph.Define(&[csample]Handler, inject.NewProvider(handler.New[CSample]Handler, &[csample]Repo))
+
+	return graph
+}
