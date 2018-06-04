@@ -6,13 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	"strings"
-
-	"github.com/syariatifaris/arkeus/core/fsm/webhook"
-	"github.com/syariatifaris/arkeus/core/log/tokolog"
 	"github.com/syariatifaris/arkeus/core/retry"
 	"github.com/syariatifaris/arkeus/core/validation"
-	"github.com/syariatifaris/arkeus/module/fsm/entity"
 )
 
 var (
@@ -71,42 +66,4 @@ func (*BusinessModel) ErrorsToString(errs []*validation.Error) string {
 
 func (*BusinessModel) NewDefaultRetryPolicy() retry.Policy {
 	return retry.NewRetryPolicy(retryAttempt)
-}
-
-//GetFsmClientErrorMessage gets the client response operation cast
-func (*BusinessModel) GetFsmClientErrorMessage(result interface{}) string {
-	if result == nil {
-		return ""
-	}
-
-	if wr, ok := result.(webhook.Response); ok {
-		if fr, ok := wr.Result.(entity.FsmOperationResponse); ok {
-			return strings.ToLower(fr.ErrMessage)
-		}
-	}
-
-	return ""
-}
-
-//Log success info for business create / update order
-func LogSuccessInfo(op, lp string, data interface{}) {
-	var appID int64
-	var appIDS []int64
-
-	if fr, ok := data.(entity.FsmOperationResponse); ok {
-		appID = fr.AppID
-		appIDS = fr.AppIDs
-	} else {
-		if wr, ok := data.(webhook.Response); ok {
-			if wr.Result != nil {
-				if fr, ok := wr.Result.(entity.FsmOperationResponse); ok {
-					appID = fr.AppID
-					appIDS = fr.AppIDs
-				}
-			}
-		}
-	}
-
-	msg := fmt.Sprintf("operation:%s success, app_id:[%+v]/app_id:[%+v]", op, appID, appIDS)
-	tokolog.DEBUG.Println(lp, msg)
 }
