@@ -20,7 +20,7 @@ Its a simple web api generator including some basic framework for:
 
 Sample usage: 
 ```$xslt
-./arkeus -gosrc=/your/go/src -project_path=github.com/syariatifaris/kosapp -module="room" -project_path=github.com/syariatifaris/diklet -module="page"
+./arkeus -gosrc=/your/go/src -project_path=github.com/syariatifaris/diklet -module="page"
 ```
 
 | Param  | Description |
@@ -58,7 +58,7 @@ List of external dependencies (libraries):
 
 
 ```$xslt
-github.com/agtorre/gocolorize 
+github.com/agtorre/gocolorize
 github.com/otiai10/copy 
 github.com/karlkfi/inject
 github.com/dgrijalva/jwt-go
