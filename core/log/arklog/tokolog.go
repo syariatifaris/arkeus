@@ -1,4 +1,4 @@
-package tokolog
+package arklog
 
 import (
 	"errors"

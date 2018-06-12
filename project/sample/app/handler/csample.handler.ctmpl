@@ -3,7 +3,7 @@ package handler
 import (
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/syariatifaris/arkeus/core/net"
 	"github.com/syariatifaris/arkeus/core/framework/handler"
 	"[cproject_path]/app/module/[csample]/repo"
 )
@@ -23,7 +23,7 @@ func (*[CSample]Handler) Name() string {
 	return "[CSample]Handler"
 }
 
-func (s *[CSample]Handler) RegisterHandlers(router *mux.Router) {
+func (s *[CSample]Handler) RegisterHandlers(router net.Router) {
 	[csample]Router := router.PathPrefix("/[csample]").Subrouter()
 	[csample]Router.HandleFunc("/all", s.NoAuthenticate(s.Index)).Methods(http.MethodGet)
 }

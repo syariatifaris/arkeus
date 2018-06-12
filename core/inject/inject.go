@@ -3,15 +3,18 @@ package inject
 import (
 	"reflect"
 
-	"github.com/karlkfi/inject"
+	"github.com/syariatifaris/arkeus/core/inject/karlfki"
 )
 
-//GetAssignedDependencies Gets Multiple Dependencies by Type (Use Inheritance)
-func GetAssignedDependencies(graph inject.Graph, lisPtr interface{}) []reflect.Value {
-	return inject.FindAssignable(graph, lisPtr)
+//NewDependencyInjection creates injection instances
+func NewDependencyInjection() Injection {
+	return karlfki.NewDependencyInjection()
+
 }
 
-//GetAssignedDependency Gets Single Dependency by Type
-func GetAssignedDependency(graph inject.Graph, v interface{}) reflect.Value {
-	return inject.ExtractAssignable(graph, v)
+//Injection contract
+type Injection interface {
+	AddDependency(ptr interface{}, constructor interface{}, argPtrs ...interface{}) interface{}
+	GetAddedDependencies(listPtr interface{}) []reflect.Value
+	GetAddedDependency(ptr interface{}) reflect.Value
 }

@@ -6,36 +6,35 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/facebookgo/grace/gracehttp"
-	"github.com/gorilla/mux"
+	"github.com/syariatifaris/arkeus/core/net"
 	"github.com/syariatifaris/arkeus/core/framework/handler"
-	"github.com/syariatifaris/arkeus/core/inject"
-	"github.com/syariatifaris/arkeus/core/log/tokolog"
+    "github.com/syariatifaris/arkeus/core/log/arklog"
+
 	"[cproject_path]/app/core"
 )
 
 func main() {
 	var (
-		router   *mux.Router
+		router   net.Router
 		handlers []handler.THandler
 	)
 
-	deps := core.NewDependencies()
-	inject.GetAssignedDependencies(deps, &handlers)
-	inject.GetAssignedDependency(deps, &router)
+	di := core.NewDependencies()
+	di.GetAddedDependencies(&handlers)
+	di.GetAddedDependency(&router)
 
 	for _, h := range handlers {
-		tokolog.INFO.Println("Registering", h.Name())
+		arklog.INFO.Println("Registering", h.Name())
 		h.RegisterHandlers(router)
 	}
 
 	var err error
 	errChan := make(chan error)
 	go func() {
-		err = gracehttp.Serve(
-			&http.Server{Addr: "0.0.0.0:[cport]", Handler: router},
+		err = net.Serve(
+			&http.Server{Addr: "0.0.0.0:9093", Handler: router.GetHandler()},
 		)
-		tokolog.ERROR.Println(err)
+		arklog.ERROR.Println(err)
 	}()
 
 	term := make(chan os.Signal, 1)
@@ -43,8 +42,8 @@ func main() {
 	select {
 
 	case <-term:
-		tokolog.WARN.Println("Signal terminate detected")
+		arklog.WARN.Println("Signal terminate detected")
 	case err := <-errChan:
-		tokolog.ERROR.Println("Server error: ", err.Error())
+		arklog.ERROR.Println("Server error: ", err.Error())
 	}
 }

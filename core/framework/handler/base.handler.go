@@ -11,10 +11,10 @@ import (
 	"github.com/syariatifaris/arkeus/core/errors"
 	"github.com/syariatifaris/arkeus/core/framework/entity"
 	"github.com/syariatifaris/arkeus/core/framework/header"
+	"github.com/syariatifaris/arkeus/core/log/arklog"
 	"github.com/syariatifaris/arkeus/core/retry"
 
-	"github.com/gorilla/mux"
-	"github.com/syariatifaris/arkeus/core/log/tokolog"
+	"github.com/syariatifaris/arkeus/core/net"
 	"github.com/syariatifaris/arkeus/core/panics"
 )
 
@@ -25,7 +25,7 @@ const MaxAttempt = 5
 //Base Handler
 type THandler interface {
 	Name() string
-	RegisterHandlers(router *mux.Router)
+	RegisterHandlers(router net.Router)
 }
 
 //The Application Mux Server
@@ -74,7 +74,7 @@ func (b *BaseHandler) NoAuthenticate(f JsonHandlerFunc) http.HandlerFunc {
 //renderJSON renders in json format
 func (b *BaseHandler) renderJSON(w http.ResponseWriter, data interface{}, err error) *entity.RenderResult {
 	if err != nil {
-		tokolog.ERROR.Println("[BaseHandler][renderJson] Response Error:", err.Error())
+		arklog.ERROR.Println("[BaseHandler][renderJson] Response Error:", err.Error())
 	}
 
 	r := constructHandlerResult(data, err)
@@ -118,7 +118,7 @@ func constructHandlerResult(data interface{}, err error) HandlerResult {
 func (b *BaseHandler) RenderError(w http.ResponseWriter, err error) *entity.RenderResult {
 	if err != nil {
 		message, code := errors.ErrorAndHTTPCode(err)
-		tokolog.ERROR.Printf("[BaseHandler][RenderError] %s. %s\n", http.StatusText(code), err.Error())
+		arklog.ERROR.Printf("[BaseHandler][RenderError] %s. %s\n", http.StatusText(code), err.Error())
 		rr := &entity.RenderResult{
 			HttpContentType: header.HttpContentTypeHTML,
 			StatusCode:      code,
@@ -135,7 +135,7 @@ func (b *BaseHandler) RenderHTML(w http.ResponseWriter, templatePath string, dat
 	t := template.New("result template")
 	t, err := template.ParseFiles(templatePath)
 	if err != nil {
-		tokolog.ERROR.Printf("[BaseHandler][RenderHTML] Cannot parse the template. Err: %s\n", err.Error())
+		arklog.ERROR.Printf("[BaseHandler][RenderHTML] Cannot parse the template. Err: %s\n", err.Error())
 		b.RenderError(w, errors.New(errors.InternalServerError))
 	}
 

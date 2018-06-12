@@ -11,7 +11,7 @@ import (
 	"net/http"
 	"runtime/debug"
 
-	"github.com/syariatifaris/arkeus/core/log/tokolog"
+	"github.com/syariatifaris/arkeus/core/log/arklog"
 )
 
 var (
@@ -33,9 +33,9 @@ type SlackConfig struct {
 //Restore the panic
 func Restore() {
 	if x := recover(); x != nil {
-		tokolog.ERROR.Println("[Panic][Restore]", x)
+		arklog.ERROR.Println("[Panic][Restore]", x)
 		stackTrace := string(debug.Stack())
-		tokolog.ERROR.Println("[Panic][Restore]", stackTrace)
+		arklog.ERROR.Println("[Panic][Restore]", stackTrace)
 		if cfg != nil {
 			if cfg.Enabled {
 				wg.Add(1)
@@ -69,7 +69,7 @@ func postToSlack(text, snip string) {
 	}
 	b, err := json.Marshal(payload)
 	if err != nil {
-		tokolog.INFO.Println("[panics] marshal err", err, text, snip)
+		arklog.INFO.Println("[panics] marshal err", err, text, snip)
 		return
 	}
 
@@ -79,7 +79,7 @@ func postToSlack(text, snip string) {
 
 	resp, err := client.Post(cfg.WebHookURL, "application/json", bytes.NewBuffer(b))
 	if err != nil {
-		tokolog.INFO.Printf("[panics] error on capturing error : %s %s %s\n", err.Error(), text, snip)
+		arklog.INFO.Printf("[panics] error on capturing error : %s %s %s\n", err.Error(), text, snip)
 		return
 	}
 
@@ -88,9 +88,9 @@ func postToSlack(text, snip string) {
 	if resp.StatusCode >= 300 {
 		b, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			tokolog.INFO.Printf("[panics] error on capturing error : %s %s %s\n", err, text, snip)
+			arklog.INFO.Printf("[panics] error on capturing error : %s %s %s\n", err, text, snip)
 			return
 		}
-		tokolog.INFO.Printf("[panics] error on capturing error : %s %s %s\n", string(b), text, snip)
+		arklog.INFO.Printf("[panics] error on capturing error : %s %s %s\n", string(b), text, snip)
 	}
 }

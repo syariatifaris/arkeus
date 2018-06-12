@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 
 	cp "github.com/otiai10/copy"
-	"github.com/syariatifaris/arkeus/core/log/tokolog"
+	"github.com/syariatifaris/arkeus/core/log/arklog"
 )
 
 type cliParam struct {
@@ -39,34 +39,34 @@ func main() {
 	param := initParams()
 
 	if param.gosrc == "" || param.proj == "" {
-		tokolog.ERROR.Println("$GOPATH/src or Project dir should be specified..")
+		arklog.ERROR.Println("$GOPATH/src or Project dir should be specified..")
 		return
 	}
 
 	dir := fmt.Sprint(param.gosrc, "/", param.proj)
 
-	tokolog.INFO.Println("copying project", param.proj, "destination:", dir)
+	arklog.INFO.Println("copying project", param.proj, "destination:", dir)
 	err := copyProject(dir)
 	if err != nil {
-		tokolog.ERROR.Println("unable to copy project", err.Error())
+		arklog.ERROR.Println("unable to copy project", err.Error())
 		return
 	}
 
-	tokolog.INFO.Println("creating module", param.module)
+	arklog.INFO.Println("creating module", param.module)
 	err = renameModule(dir, param.module)
 	if err != nil {
-		tokolog.ERROR.Println("unable to process module dir", err.Error())
+		arklog.ERROR.Println("unable to process module dir", err.Error())
 		return
 	}
 
-	tokolog.INFO.Println("writing files..")
+	arklog.INFO.Println("writing files..")
 	err = traverseDirWriteFile(dir, param.proj, param.module, param.port)
 	if err != nil {
-		tokolog.ERROR.Println("unable to process write file", err.Error())
+		arklog.ERROR.Println("unable to process write file", err.Error())
 		return
 	}
 
-	tokolog.INFO.Println("project", param.proj, "has been created")
+	arklog.INFO.Println("project", param.proj, "has been created")
 }
 
 func copyProject(dir string) error {
