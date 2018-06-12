@@ -11,9 +11,15 @@ Its a simple web api generator including some basic framework for:
 ##
 ### Instalation
 
+**A. Using Go Get**
+
 1. `go get github.com/syariatifaris/arkeus` to obtain the latest project
 2. `cd $GOPATH/src/github.com/syariatifaris/arkeus` to enter the project
 3. `go get -d ./...` to obtain all framework dependencies
+
+**B. Using Dep**
+
+1. `dep ensure` or `dep ensure -v`
 
 ##
 ### How to use
