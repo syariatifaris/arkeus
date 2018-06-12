@@ -8,7 +8,7 @@ func New[CSample]Repository() [CSample]Repository {
 
 type [CSample]Repository interface {
 	GetAll() []*model.[CSample]
-	Get(id int64) *model.[CSample]
+	GetByID(id int64) *model.[CSample]
 }
 
 type [csample]Repository struct {
@@ -18,6 +18,6 @@ func (*[csample]Repository) GetAll() []*model.[CSample] {
 	return []*model.[CSample]{}
 }
 
-func (*[csample]Repository) Get(id int64) *model.[CSample] {
+func (*[csample]Repository) GetByID(id int64) *model.[CSample] {
 	return &model.[CSample]{}
 }
