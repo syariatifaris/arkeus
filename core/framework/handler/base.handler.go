@@ -14,6 +14,7 @@ import (
 	"github.com/syariatifaris/arkeus/core/log/arklog"
 	"github.com/syariatifaris/arkeus/core/retry"
 
+	"github.com/gorilla/mux"
 	"github.com/syariatifaris/arkeus/core/net"
 	"github.com/syariatifaris/arkeus/core/panics"
 )
@@ -166,4 +167,9 @@ func (b *BaseHandler) RejectionHandler() http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		b.RenderError(writer, errors.New(errors.TooManyRequest))
 	}
+}
+
+func (b *BaseHandler) GetQueryData(r *http.Request, key string) string {
+	queries := mux.Vars(r)
+	return queries[key]
 }
