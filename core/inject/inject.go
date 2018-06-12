@@ -17,4 +17,5 @@ type Injection interface {
 	AddDependency(ptr interface{}, constructor interface{}, argPtrs ...interface{}) interface{}
 	GetAddedDependencies(listPtr interface{}) []reflect.Value
 	GetAddedDependency(ptr interface{}) reflect.Value
+	Resolve(ptr interface{}) reflect.Value
 }

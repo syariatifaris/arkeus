@@ -27,3 +27,7 @@ func (d *DIImpl) GetAddedDependencies(listPtr interface{}) []reflect.Value {
 func (d *DIImpl) GetAddedDependency(ptr interface{}) reflect.Value {
 	return inject.ExtractAssignable(d.graph, ptr)
 }
+
+func (d *DIImpl) Resolve(ptr interface{}) reflect.Value {
+	return d.graph.Resolve(ptr)
+}
