@@ -1,10 +1,10 @@
 package repo
 
 import (
-	"github.com/tokopedia/sqlt"
+	"github.com/jmoiron/sqlx"
 )
 
 //Base Database Repository
 type BaseDatabaseRepository interface {
-	GetDB() *sqlt.DB
+	GetDB() *sqlx.DB
 }
